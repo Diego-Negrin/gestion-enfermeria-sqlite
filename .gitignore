@@ -1,0 +1,8 @@
+# Base de datos local (datos sensibles y pruebas)
+*.db
+*.sqlite3
+
+# Archivos temporales de Python y VS Code
+__pycache__/
+*.pyc
+.vscode/
