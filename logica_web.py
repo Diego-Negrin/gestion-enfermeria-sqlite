@@ -135,6 +135,7 @@ def dar_alta_paciente(numero_cama):
 
 def registrar_consumo(numero_cama, nombre_insumo, cantidad, procedimiento=""):
     try:
+        numero_cama = int(numero_cama)
         cantidad = int(cantidad)
     except (ValueError, TypeError):
         return False, "La cantidad debe ser un número entero válido."
