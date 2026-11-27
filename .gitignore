@@ -4,6 +4,7 @@
 
 #Entorno virtual
 venv/
+.venv/
 
 # Archivos temporales de Python y VS Code
 __pycache__/
