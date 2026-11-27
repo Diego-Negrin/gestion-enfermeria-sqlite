@@ -14,7 +14,7 @@ def buscar_insumo(nombre_buscado):
 
 def agregar_insumo(nombre, stock, descripcion=""):
     try:
-        cantidad = int(cantidad)
+        stock = int(stock)
     except (ValueError, TypeError):
         return False, "La cantidad debe ser un número entero válido."
     if not nombre or not nombre.strip():
