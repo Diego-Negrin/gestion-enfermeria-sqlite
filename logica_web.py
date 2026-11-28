@@ -47,7 +47,7 @@ def mostrar_insumos():
 
 def actualizar_stock_insumos(nombre, cant_sumar):
     try:
-        cantidad = int(cantidad)
+        cant_sumar = int(cant_sumar)
     except (ValueError, TypeError):
         return False, "La cantidad debe ser un número entero válido."
     if cant_sumar <= 0:
@@ -212,4 +212,13 @@ def eliminar_consumo(consumo_id):
     conexion.commit()
     conexion.close()
     return True, f"Consumo con ID {consumo_id} eliminado y stock del insumo {consumo['insumo_nombre']} restaurado."
+
+def mostrar_historial_consumos():
+    conexion = conectar()
+    cursor = conexion.cursor()
+    cursor.execute("SELECT * FROM consumos ORDER BY fecha DESC")
+    consumos = cursor.fetchall()
+    conexion.close()
+    return consumos
+
 #________________________________________________________________________________________________________________

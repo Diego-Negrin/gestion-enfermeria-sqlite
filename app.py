@@ -72,6 +72,53 @@ def sumar_stock():
     flash(mensaje, "success" if exito else "danger")
     return redirect(url_for("gestionar_insumos"))
 
+@app.route("/consumos/registrar", methods=["POST"])
+def registrar_consumo_ruta():
+    numero_cama = request.form.get("numero_cama")
+    nombre_insumo = request.form.get("nombre_insumo")
+    cantidad = request.form.get("cantidad")
+    procedimiento = request.form.get("procedimiento", "")
+
+    exito, mensaje = logica.registrar_consumo(
+        numero_cama, nombre_insumo, cantidad, procedimiento
+    )
+    flash(mensaje, "success" if exito else "danger")
+    return redirect(url_for("ver_camas"))
+
+
+@app.route("/cama/<int:numero_cama>/consumos")
+def historial_consumos_cama(numero_cama):
+    camas = logica.mostrar_camas()
+    cama = next((c for c in camas if c["numero"] == numero_cama), None)
+    if not cama:
+        flash(f"No existe la cama número {numero_cama}.", "danger")
+        return redirect(url_for("ver_camas"))
+
+    consumos = logica.ver_consumos_cama(numero_cama)
+    insumos = logica.mostrar_insumos()
+    return render_template(
+        "consumos_cama.html",
+        cama=cama,
+        consumos=consumos,
+        insumos=insumos,
+    )
+
+
+@app.route("/consumos/eliminar/<int:consumo_id>", methods=["POST"])
+def eliminar_consumo_ruta(consumo_id):
+    numero_cama = request.form.get("numero_cama")
+    exito, mensaje = logica.eliminar_consumo(consumo_id)
+    flash(mensaje, "success" if exito else "danger")
+
+    if numero_cama:
+        return redirect(url_for("historial_consumos_cama", numero_cama=numero_cama))
+    return redirect(url_for("ver_camas"))
+
+
+@app.route("/consumos")
+def historial_consumos():
+    consumos = logica.mostrar_historial_consumos()
+    return render_template("historial_consumos.html", consumos=consumos)
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5000)
